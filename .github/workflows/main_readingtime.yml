@@ -26,7 +26,7 @@ jobs:
       run: dotnet restore src/ReadingTime6.Web/ReadingTime6.Web.csproj
 
     - name: Build
-      run: dotnet build src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-restore
+      run: dotnet build src/ReadingTime6.Web/ReadingTime6.Web.csproj --no-restore
 
     - name: Test
       run: dotnet test src/ReadingTime6.Web.Tests.Unit/ReadingTime6.Web.Tests.Unit.csproj --no-restore --verbosity normal
