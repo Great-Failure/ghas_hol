@@ -14,25 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+    - name: Restore dependencies
+      run: dotnet restore src/ReadingTime6.Web/ReadingTime6.Web.csproj
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+    - name: Build
+      run: dotnet build src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-restore
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
+    - name: Publish
+      run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-build --output ./output
+    
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: src/ReadingTime6.Web/
 
   deploy:
     runs-on: ubuntu-latest
