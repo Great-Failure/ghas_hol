@@ -54,6 +54,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'readingtime'
-          slot-name: 'Production'
+          slot-name: 'readingtime'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1D77A2D5B0D24556B4A0B8D98C6B737D }}
           package: .
