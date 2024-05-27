@@ -34,6 +34,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'readingtime' # replace with your App Service name
-        slot-name: 'preview' # replace with your Slot name
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1D77A2D5B0D24556B4A0B8D98C6B737D }}
+        slot-name: 'readingtime-preview' # replace with your Slot name
+        publish-profile: ${{ secrets.READINGTIMEPREVIEW }}
         package: './output'
