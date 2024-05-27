@@ -30,6 +30,12 @@ jobs:
 
     - name: Publish
       run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-build --output ./output
+    
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+          name: .net-app
+          path: src/ReadingTime6.Web/
 
   deploy:
     runs-on: ubuntu-latest
@@ -38,11 +44,11 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-#    steps:
-#      - name: Download artifact from build job
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: .net-app
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
