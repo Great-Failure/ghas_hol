@@ -32,13 +32,14 @@ jobs:
       run: dotnet test src/ReadingTime6.Web.Tests.Unit/ReadingTime6.Web.Tests.Unit.csproj --no-restore --verbosity normal
 
     - name: Publish
-      run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-build --output ./output
+      run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release
+      # run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-build --output ./output
     
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
           name: .net-app
-          path: /home/runner/work/ghas_hol/ghas_hol/output/
+          path: /home/runner/work/ghas_hol/ghas_hol/src/ReadingTime6.Web/bin/Release
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,7 +55,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-          path: /home/runner/work/
       
       - name: Login to Azure
         uses: azure/login@v1
