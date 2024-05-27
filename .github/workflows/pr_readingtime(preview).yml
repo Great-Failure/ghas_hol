@@ -5,8 +5,8 @@ name: preview Build and deploy
 
 on:
   push:
-    branches:
-      - main
+    branches-ignore:
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -55,12 +55,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0335F173790D4B11A64C8E7124612DC1 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A812B4741EBD47C2A331260725D013CB }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_453CE621BA474397946F58C2C636CB83 }}
-         # client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F555B5C881714A0F97305C1AFEA795D0 }}
-         # tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D5D3DECF962A4FE096B4A27DB85EF391 }}
-         # subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8183C33D348844C295F82CF72DB6F362 }}
+         client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F555B5C881714A0F97305C1AFEA795D0 }}
+         tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D5D3DECF962A4FE096B4A27DB85EF391 }}
+         subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8183C33D348844C295F82CF72DB6F362 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
