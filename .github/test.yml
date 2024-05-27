@@ -1,11 +1,25 @@
-name: Tests
+name: Run Unit Tests
 
-on: push
+on: [push]
 
 jobs:
-  tests:
-    name: Unit Testing
-    runs-on: windows-latest
+  build:
+
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2.1.0
-      - run: dotnet test
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore src/ReadingTime6.Web.Tests.Unit/ReadingTime6.Web.Tests.Unit.csproj
+
+    - name: Build
+      run: dotnet build src/ReadingTime6.Web.Tests.Unit/ReadingTime6.Web.Tests.Unit.csproj --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test src/ReadingTime6.Web.Tests.Unit/ReadingTime6.Web.Tests.Unit.csproj --no-restore --verbosity normal
