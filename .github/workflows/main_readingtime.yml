@@ -1,7 +1,8 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: PROD - Build and deploy
+name: Build and deploy ASP.Net Core app to Azure Web App - readingtime
+
 on:
   push:
     branches:
@@ -13,28 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
 
-    - name: Restore dependencies
-      run: dotnet restore src/ReadingTime6.Web/ReadingTime6.Web.csproj
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-    - name: Build
-      run: dotnet build src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-restore
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-    - name: Publish
-      run: dotnet publish src/ReadingTime6.Web/ReadingTime6.Web.csproj --configuration Release --no-build --output ./output
-    
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v3
-      with:
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
           name: .net-app
-          path: src/ReadingTime6.Web/
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,18 +40,27 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0335F173790D4B11A64C8E7124612DC1 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A812B4741EBD47C2A331260725D013CB }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_453CE621BA474397946F58C2C636CB83 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'readingtime'
-          slot-name: 'readingtime'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1D77A2D5B0D24556B4A0B8D98C6B737D }}
+          slot-name: 'Production'
           package: .
+          
