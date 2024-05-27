@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
           name: .net-app
-          path: /home/runner/work/ghas_hol/ghas_hol/src/bin/Release
+          path: /home/runner/work/ghas_hol/ghas_hol/src/ReadingTime6.Web/bin/Release
   deploy:
     runs-on: ubuntu-latest
     needs: build
